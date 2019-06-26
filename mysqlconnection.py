@@ -55,7 +55,7 @@ while inicio==0:
 		for i in rows:
 			print("\nREGISTROS: ",i)
 
-		#los datos (ingresados) se perpetrar(commit) a la base de datos
+		#los datos (ingresados) se perpetran(commit) a la base de datos
 		conexion_db.commit()
 
 	#para error de conexión
