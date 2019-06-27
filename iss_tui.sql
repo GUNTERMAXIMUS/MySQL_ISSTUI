@@ -32,7 +32,6 @@ while inicio==0:
 			password=input("\t>PASSWORD: ")
 			database=input("\t>DATABASE: ")
 			port=input("\t>PORT: ")
-
 		elif opcion_configuracion=="2":
 			database=input("\t>DATABASE: ")
 			host="localhost"
@@ -42,10 +41,11 @@ while inicio==0:
 		else:
 			print("\n\tdebe ingresar una opción correcta")
 			inicio=0 #LUEGO ARREGLAR
-			
+			break
 	else:
 		print("\n\tdebe ingresar un número")
 		inicio=0 #LUEGO ARREGLAR
+		break
 
 	
 	#los argumentos de conexión definidos en un diccionario [con keys:values] para su mejor manipulación
@@ -126,6 +126,7 @@ while inicio==0:
 	  			#cerrando conexión
 	  			print(">>Desconectando de la DATABASE",database)
 	  			conexion_db.close()
+	  			print(">>Desconectado de MySQL.")
 	  			break
 	  		else:
 	  			print("\n\terror: opción incorrecta")
