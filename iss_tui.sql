@@ -18,13 +18,37 @@ while inicio==0:
 	print("\n/////////////////////////////////////////////////////////")
 	print("\t>>>BIENVENIDO A MYSQL-CONNECTOR-PYTHON<<<")
 	print("////////////////////////////////////////////////////////")
-	host=input("\n\t>HOST: ingrese host (ej.localhost): ")
-	user=input("\t>USER: ingrese usuario (ej. root): ")
-	password=input("\t>PASSWORD: ingrese contraseña (puede estar vacío): ")
-	database=input("\t>DATABASE: ingrese base de datos: ")
-	port=input("\t>PORT: ingrese puerto (default: 3306): ")
+	
+	print("\n\tIngreso de datos de configuracion de conexión")
+	print("\t1. Manual")
+	print("\t2. Automático (se ingresará datos por default)")
+	opcion_configuracion=input("\t>Ingrese opción numérica: ")
+
+	if opcion_configuracion.isnumeric()==True:
+		if opcion_configuracion=="1":
+			print("\n\tIngrese los siguientes datos")
+			host=input("\n\t>HOST: ")
+			user=input("\t>USER: ")
+			password=input("\t>PASSWORD: ")
+			database=input("\t>DATABASE: ")
+			port=input("\t>PORT: ")
 
 
+		elif opcion_configuracion=="2":
+			database=input("\t>DATABASE: ")
+			host="localhost"
+			user="root"
+			password=""
+			port="3306"
+		else:
+			print("\n\tdebe ingresar una opción correcta")
+			inicio=0 #LUEGO ARREGLAR
+			
+	else:
+		print("\n\tdebe ingresar un número")
+		inicio=0 #LUEGO ARREGLAR
+
+	
 	#los argumentos de conexión definidos en un diccionario [con keys:values] para su mejor manipulación
 	#otra opción --> configuracion=mysql.connector.connect(option_files='/etc/mysql/connectors.cnf')
 	configuracion[HOST]=host
@@ -32,7 +56,7 @@ while inicio==0:
 	configuracion[PASSWD]=password
 	configuracion[DB]=database
 	configuracion[PORT]=port
-
+	
 	#conectando a la DB
 	try:
 		conexion_db=mysql.connector.connect(**configuracion)
@@ -52,11 +76,12 @@ while inicio==0:
 					print("\n\t>>LEYENDO",archivo) 
 					for row in csv_data:
 						print("\t",row) #imprime una lista de todos los valores por cada linea 
-						"""
-						cursor.execute("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala)" 
-							"VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",row)
-						print("datos csv insertados a la db")
-						"""
+
+						#separar el statement sql para 
+						#statement_sql_import=
+						#cursor.execute("INSERT INTO registros (clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s)",(row[0], row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
+						#print("datos csv insertados a la db")
+			
 			else:
 				print("\n\t>>El archivo no existe")
 				inicio=1
