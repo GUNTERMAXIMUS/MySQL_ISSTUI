@@ -44,19 +44,24 @@ while inicio==0:
 
 		while inicio==1:
 			inicio+=1
-			archivo=input("\n\tIngrese nombre del archivo.csv: ")
+			archivo=input("\n\tIngrese nombre del archivo.csv o path (ej. C:/users/user/desktop/carpeta/archivo.csv): ")
 			if os.path.exists(archivo):
 				with open(archivo,"r") as csv_file:
 					csv_data=csv.reader(csv_file,delimiter=" ")
-					print("\n\t>>LEYENDO",archivo)
+					print("\n\t>>LEYENDO",archivo) 
 					for row in csv_data:
 						print("\t",row) #imprime una lista de todos los valores por cada linea 
+						cursor.execute(
+							"INSERT INTO registros(id,clave_profesor,nombre,apellido,fecha,hora_de_ingreso,hora_de_salida,sala)"
+							"VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+							,row)
+						print("datos csv insertados a la db")
 			else:
 				print("\n\t>>El archivo no existe")
 				inicio=1
 
 		#ejecutar la query 
-		cursor.execute("SELECT * FROM registros") #(prepara la sentencia)
+		cursor.execute("SELECT * FROM registros") #(execute: prepara la sentencia)
 		rows=cursor.fetchall()#(presenta el resultado | FETCH ALL)
 		for i in rows:
 			print("\n\t>>REGISTROS DATABASE:")
@@ -74,9 +79,9 @@ while inicio==0:
 	    print("\n\t>>La DATABASE no existe")
 	    inicio=0
 	  else:
-	    print("\n>>>ERROR DE CONEXIÓN:")
+	    print("\n>>>ERROR DE MYSQL (conexión o parámetros):")
 	    print("\t>>No es posible conectar MySQL server")
-	    print("\t>>error: ",err)
+	    print("\t>>error:",err)
 	    inicio=0
     
 	else:
