@@ -32,7 +32,6 @@ while inicio==0:
 	configuracion[PASSWD]=password
 	configuracion[DB]=database
 	configuracion[PORT]=port
-	configuracion[AUTO]=auto
 
 	#conectando a la DB
 	try:
