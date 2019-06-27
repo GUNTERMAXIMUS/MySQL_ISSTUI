@@ -1,4 +1,4 @@
-import csv, json, mysql.connector
+import csv, json, os, mysql.connector
 from mysql.connector import errorcode
 
 #constantes
@@ -35,27 +35,34 @@ while inicio==0:
 	#conectando a la DB
 	try:
 		conexion_db=mysql.connector.connect(**configuracion)
-		print("\n\t>>>CONECTADO EXITOSAMENTE A LA DATABASE: ",database)
+		print("\n\t>>>CONECTADO EXITOSAMENTE A LA DATABASE:",database)
 		print("\t>>>Bienvenido",user)
 
 		#cursor (nos permite ejecutar y usar los comandos SQL en la sesión actual)
 		#nos da la ventaja de tener multiples y separados ambientes de trabajo a traves de la misma conexión a la base de datos.
 		cursor=conexion_db.cursor()
 
-		with open("nombredelarchivo.csv","r") as csv_file:
-			csv_data=csv.reader(csv_file,delimiter=" ")
-			print("\n>>LEYENDO archivo.csv")
-			for row in csv_data:
-				print(row) #imprime una lista de todos los valores por cada linea 
-
+		while inicio==1:
+			inicio+=1
+			archivo=input("\n\tIngrese nombre del archivo.csv: ")
+			if os.path.exists(archivo):
+				with open(archivo,"r") as csv_file:
+					csv_data=csv.reader(csv_file,delimiter=" ")
+					print("\n\t>>LEYENDO",archivo)
+					for row in csv_data:
+						print("\t",row) #imprime una lista de todos los valores por cada linea 
+			else:
+				print("\n\t>>El archivo no existe")
+				inicio=1
 
 		#ejecutar la query 
 		cursor.execute("SELECT * FROM registros") #(prepara la sentencia)
 		rows=cursor.fetchall()#(presenta el resultado | FETCH ALL)
 		for i in rows:
-			print("\nREGISTROS: ",i)
+			print("\n\t>>REGISTROS DATABASE:")
+			print("\t",i)
 
-		#los datos (ingresados) se perpetran(commit) a la base de datos
+		#los datos (ingresados) se perpetrar(commit) a la base de datos
 		conexion_db.commit()
 
 	#para error de conexión
@@ -73,7 +80,7 @@ while inicio==0:
 	    inicio=0
     
 	else:
-	  while inicio==1:
+	  while inicio==2:
 	  	print("\n¿Desea realizar otra operación?")
 	  	print("\t1. Sí")
 	  	print("\t2. No")
@@ -92,7 +99,7 @@ while inicio==0:
 	  			break
 	  		else:
 	  			print("\n\terror: opción incorrecta")
-	  			inicio=1
+	  			inicio=2
 	  	else:
 	  		print("\n\t>>error: debe ingresar un número")
-	  		incio=1
+	  		incio=2
