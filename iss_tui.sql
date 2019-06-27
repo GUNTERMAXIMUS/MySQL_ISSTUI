@@ -33,7 +33,6 @@ while inicio==0:
 			database=input("\t>DATABASE: ")
 			port=input("\t>PORT: ")
 
-
 		elif opcion_configuracion=="2":
 			database=input("\t>DATABASE: ")
 			host="localhost"
