@@ -70,17 +70,32 @@ while inicio==0:
 			inicio+=1
 			archivo=input("\n\tIngrese nombre del archivo.csv o path (ej. C:/users/user/desktop/carpeta/archivo.csv): ")
 			if os.path.exists(archivo):
-				with open(archivo,"r") as csv_file:
-					csv_data=csv.reader(csv_file,delimiter=" ")
-					print("\n\t>>LEYENDO",archivo) 
-					for row in csv_data:
-						print("\t",row) #imprime una lista de todos los valores por cada linea 
 
-						#separar el statement sql para 
-						#statement_sql_import=
-						#cursor.execute("INSERT INTO registros (clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s)",(row[0], row[1],row[2],row[3],row[4],row[5],row[6],row[7]))
-						#print("datos csv insertados a la db")
-			
+				with open(archivo,"r") as csv_file:
+					csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
+					print("\n\t>>LEYENDO",archivo) 
+
+					#separar el statement sql para 
+					query=("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)")
+					values=("id","clave_profesor","nombre","apellido","fecha","hora_de_ingreso","hora_de_salida","sala")
+					for row in csv_data:
+						str(row[0])
+						str(row[1]),
+						str(row[2]),
+						str(row[3])
+						str(row[4])
+						str(row[5])
+						str(row[6])
+						str(row[7])
+						print("\t",row) #imprime una lista de todos los valores por cada linea 
+	
+						cursor.execute(query, row)
+					print("\n>>>HA IMPORTADO",archivo," EXITOSAMENTE A",database,"!!!")
+
+					#cursor.execute("INSERT INTO registros (clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s)",(row[1],row[2],row[3]))
+					# data=list(csv.reader(csv_file))
+					
+
 			else:
 				print("\n\t>>El archivo no existe")
 				inicio=1
@@ -124,7 +139,7 @@ while inicio==0:
 	  			print("\n>>Cerrando el cursor...")
 	  			cursor.close()
 	  			#cerrando conexión
-	  			print(">>Desconectando de la DATABASE",database)
+	  			print(">>Desconectando de la DATABASE",database,"...")
 	  			conexion_db.close()
 	  			print(">>Desconectado de MySQL.")
 	  			break
