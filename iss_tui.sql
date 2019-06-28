@@ -80,8 +80,8 @@ while inicio==0:
 					values=("id","clave_profesor","nombre","apellido","fecha","hora_de_ingreso","hora_de_salida","sala")
 					for row in csv_data:
 						str(row[0])
-						str(row[1]),
-						str(row[2]),
+						str(row[1])
+						str(row[2])
 						str(row[3])
 						str(row[4])
 						str(row[5])
