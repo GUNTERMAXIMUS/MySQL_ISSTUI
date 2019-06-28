@@ -7,6 +7,7 @@ USER="user"
 PASSWD="password"
 DB="database"
 PORT="port"
+CHARSET="charset"
 #variables
 inicio=0
 host=""
@@ -14,6 +15,7 @@ user=""
 password=""
 database=""
 port=""
+charset=""
 
 #dictionary vacío
 configuracion={}
@@ -38,12 +40,14 @@ while inicio==0:
 			password=input("\t>PASSWORD: ")
 			database=input("\t>DATABASE: ")
 			port=input("\t>PORT: ")
+			charset=input("\t>CHARSET: ")
 		elif opcion_configuracion=="2":
 			database=input("\t>DATABASE: ")
 			host="localhost"
 			user="root"
 			password=""
 			port="3306"
+			charset="utf8"
 		else:
 			print("\n\tdebe ingresar una opción correcta")
 			inicio=0
@@ -58,7 +62,7 @@ while inicio==0:
 	configuracion[PASSWD]=password
 	configuracion[DB]=database
 	configuracion[PORT]=port
-	
+	configuracion[CHARSET]=charset	
 	#conectando a la DB
 	try:
 		conexion_db=mysql.connector.connect(**configuracion)
@@ -71,43 +75,108 @@ while inicio==0:
 
 		while inicio==1:
 			inicio+=1
-			archivo=input("\n\tIngrese nombre del archivo.csv o path (ej. C:/users/user/desktop/carpeta/archivo.csv): ")
-			if os.path.exists(archivo):	
-				with open(archivo,"r") as csv_file:
-					csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
-					print("\n\t>>Leyendo",archivo,"...") 
+			#MENU PRINCIPAL
+			print("\n\tSELECCIONE UNA OPCIÓN para",database)
+			print("\t1. Extraccion de datos 'registros' en sql")
+			print("\t2. Importar datos CSV")
+			print("\t3. Importar o extrer datos JSON")
+			print("\t4. Exit")
+			main_menu=input("\t>Ingrese una opción numérica: ")
+			if main_menu.isnumeric()==True:
+				if main_menu=="1":
+					x=0	
+					while x==0:
+						x+=1
+						print("\n\tOPCIONES SQL")
+						print("\t1. Leer tabla de",database)
+						print("\t2. ID's")
+						print("\t3. Clave profesor")
+						print("\t4. Nombre y apellido")
+						print("\t5. Fecha")
+						print("\t6. volver")
+						op_sql=input("\tIngrese opcion numérica: ")
+						if op_sql.isnumeric()==True:
+							if op_sql=="1":								
+								#ejecutar la query
+								cursor.execute("SELECT * FROM registros")
+								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+								print("\n\t>>REGISTROS DATABASE:")
+								for i in rows:
+									print("\t",i)
+							elif op_sql=="2":
+								print("\n\tIngrese ID's BETWEEN (puede seleccionar el mismo número para una ID)")
+								id1=input("\t> ID 1: ")
+								id2=input("\t> ID 2: ")
+								cursor.execute("SELECT * FROM registros WHERE id BETWEEN %s AND %s",(id1,id2,))
+								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+								print("\n\t>>REGISTROS DATABASE:")
+								for i in rows:
+									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])
+							elif op_sql=="3":
+								clave=input("\n\t> clave: ")
+								cursor.execute("SELECT * FROM registros WHERE clave_profesor=%s",(clave,))
+								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+								print("\n\t>>REGISTROS DATABASE:")
+								for i in rows:
+									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])											
+							elif op_sql=="4":
+								print("\n\tPara ingresar acentos o caracteres en español, es necesario que su database esté con UTF-8")
+								print("\tDe lo contrario no se imprimirán los resultados buscados")
+								nombre=input("\t\n> nombre: ")
+								apellido=input("\t> apellido: ")
+								cursor.execute("SELECT * FROM registros WHERE nombre=%s AND apellido=%s",(nombre,apellido,))
+								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+								print("\n\t>>REGISTROS DATABASE:")
+								for i in rows:
+									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])								
+							elif op_sql=="5":
+								print("Ingrese en el siguiente formato: AAAA/MM/DD")
+								fecha=input("\t>Fecha: ")
+								cursor.execute("SELECT * FROM registros WHERE fecha=%s",(fecha,))
+								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+								print("\n\t>>REGISTROS DATABASE:")
+								for i in rows:
+									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])			
+							elif op_sql=="6":
+								inicio=1
+							else:
+								print("\n\terror: opción inválida")
+								x=0
+						else:
+							print("\n\terror: debe ingresar un número")
+							x=0
 
-					#separar el statement sql entre query y values 
-					#e implementarlo en un loop (for) a cada índice de cada fila (row) del archivo csv que ha sido abierto y leído.
-					query=("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)")
-					values=("id","clave_profesor","nombre","apellido","fecha","hora_de_ingreso","hora_de_salida","sala")
-					for row in csv_data:
-						str(row[0])
-						str(row[1])
-						str(row[2])
-						str(row[3])
-						str(row[4])
-						str(row[5])
-						str(row[6])
-						str(row[7])
-						print("\timportando:",row) #imprime una lista de todos los valores por cada linea 
-						cursor.execute(query, row)
-						cursor.execute("DELETE FROM registros where sala=0 OR clave_profesor=0;")
-					print("\t>>Datos innecesarios eliminados correctamente.")
-					print("\n\t>>>Ha importado",archivo," EXITOSAMENTE a",database,"!!!<<<")		
-			else:
-				print("\n\t>>El archivo no existe")
-				inicio=1
+				elif main_menu=="2":
+					archivo=input("\n\tIngrese nombre del archivo.csv o path (ej. C:/users/user/desktop/carpeta/archivo.csv): ")
+					if os.path.exists(archivo):	
+						with open(archivo,"r") as csv_file:
+							csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
+							print("\n\t>>Leyendo",archivo,"...") 
 
-		#ejecutar la query 
-		cursor.execute("SELECT * FROM registros") #(execute: prepara la sentencia)
-		rows=cursor.fetchall()#(presenta el resultado | FETCH ALL)	
-		print("\n\t>>REGISTROS DATABASE:")
-		for i in rows:
-			print("\t",i)
-
-		#los datos (ingresados) se perpetrar(commit) a la base de datos
-		conexion_db.commit()
+							#separar el statement sql entre query y values 
+							#e implementarlo en un loop (for) a cada índice de cada fila (row) del archivo csv que ha sido abierto y leído.
+							query=("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)")
+							values=("id","clave_profesor","nombre","apellido","fecha","hora_de_ingreso","hora_de_salida","sala")
+							for row in csv_data:
+								str(row[0])
+								str(row[1])
+								str(row[2])
+								str(row[3])
+								str(row[4])
+								str(row[5])
+								str(row[6])
+								str(row[7])
+								print("\timportando:",row) #imprime una lista de todos los valores por cada linea 
+								cursor.execute(query, row)
+								cursor.execute("DELETE FROM registros where sala=0 OR clave_profesor=0;")
+							print("\t>>Datos innecesarios eliminados correctamente.")
+							print("\n\t>>>Ha importado",archivo," EXITOSAMENTE a",database,"!!!<<<")
+							conexion_db.commit()		
+					else:
+						print("\n\t>>El archivo no existe")
+						inicio=1
+#				elif main_menu=="3":
+#				elif main_menu=="4":
 
 	#para error de conexión
 	except mysql.connector.Error as err:
@@ -125,6 +194,7 @@ while inicio==0:
     
 	else:
 	  while inicio==2:
+	  	inicio+=1
 	  	print("\n¿Desea realizar otra operación?")
 	  	print("\t1. Sí")
 	  	print("\t2. No")
@@ -132,8 +202,23 @@ while inicio==0:
 
 	  	if operacion.isnumeric()==True:
 	  		if operacion=="1":
-	  			inicio=0
-	  		elif operacion=="2":
+	  			while inicio==3:
+	  				print("\n\t1. MENU INICIO (configuracion de conexión)")
+	  				print("\t2. volver")
+	  				menus=input("\t>Ingrese una opción: ")
+	  				if menus.isnumeric()==True:
+	  					if menus=="1":
+	  						inicio=0
+	  					elif menus=="2":
+	  						inicio=2
+	  					else:
+	  						print("\n\terror: opcion incorrecta")
+	  						inicio=3
+	  				else:
+	  					print("\n\terror: debe ingresar un número")
+	  					inicio=3
+	  			
+	  		elif operacion=="2" or operacion=="exit":
 	  			#cerrando cursor
 	  			print("\n>>Cerrando el cursor...")
 	  			cursor.close()
