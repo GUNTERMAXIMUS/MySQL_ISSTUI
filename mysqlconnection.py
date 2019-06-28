@@ -18,12 +18,35 @@ while inicio==0:
 	print("\n/////////////////////////////////////////////////////////")
 	print("\t>>>BIENVENIDO A MYSQL-CONNECTOR-PYTHON<<<")
 	print("////////////////////////////////////////////////////////")
-	host=input("\n\t>HOST: ingrese host (ej.localhost): ")
-	user=input("\t>USER: ingrese usuario (ej. root): ")
-	password=input("\t>PASSWORD: ingrese contraseña (puede estar vacío): ")
-	database=input("\t>DATABASE: ingrese base de datos: ")
-	port=input("\t>PORT: ingrese puerto (ej. 3306): ")
+	
+	print("\n\tIngreso de datos de configuracion de conexión")
+	print("\t1. Manual")
+	print("\t2. Automático (se ingresará datos por default)")
+	opcion_configuracion=input("\t>Ingrese opción numérica: ")
 
+	if opcion_configuracion.isnumeric()==True:
+		if opcion_configuracion=="1":
+			print("\n\tIngrese los siguientes datos")
+			host=input("\n\t>HOST: ")
+			user=input("\t>USER: ")
+			password=input("\t>PASSWORD: ")
+			database=input("\t>DATABASE: ")
+			port=input("\t>PORT: ")
+		elif opcion_configuracion=="2":
+			database=input("\t>DATABASE: ")
+			host="localhost"
+			user="root"
+			password=""
+			port="3306"
+		else:
+			print("\n\tdebe ingresar una opción correcta")
+			inicio=0 #LUEGO ARREGLAR
+			break
+	else:
+		print("\n\tdebe ingresar un número")
+		inicio=0 #LUEGO ARREGLAR
+		break
+	
 	#los argumentos de conexión definidos en un diccionario [con keys:values] para su mejor manipulación
 	#otra opción --> configuracion=mysql.connector.connect(option_files='/etc/mysql/connectors.cnf')
 	configuracion[HOST]=host
@@ -31,7 +54,7 @@ while inicio==0:
 	configuracion[PASSWD]=password
 	configuracion[DB]=database
 	configuracion[PORT]=port
-
+	
 	#conectando a la DB
 	try:
 		conexion_db=mysql.connector.connect(**configuracion)
@@ -46,16 +69,28 @@ while inicio==0:
 			inicio+=1
 			archivo=input("\n\tIngrese nombre del archivo.csv o path (ej. C:/users/user/desktop/carpeta/archivo.csv): ")
 			if os.path.exists(archivo):
+
 				with open(archivo,"r") as csv_file:
-					csv_data=csv.reader(csv_file,delimiter=" ")
+					csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
 					print("\n\t>>LEYENDO",archivo) 
+
+					#separar el statement sql entre query y values 
+					#e implementarlo en un loop (for) a cada índice de cada fila (row) del archivo csv que ha sido abierto y leído.
+					query=("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)")
+					values=("id","clave_profesor","nombre","apellido","fecha","hora_de_ingreso","hora_de_salida","sala")
 					for row in csv_data:
+						str(row[0])
+						str(row[1])
+						str(row[2])
+						str(row[3])
+						str(row[4])
+						str(row[5])
+						str(row[6])
+						str(row[7])
 						print("\t",row) #imprime una lista de todos los valores por cada linea 
-						cursor.execute(
-							"INSERT INTO registros(id,clave_profesor,nombre,apellido,fecha,hora_de_ingreso,hora_de_salida,sala)"
-							"VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-							,row)
-						print("datos csv insertados a la db")
+	
+						cursor.execute(query, row)
+						print("\n\t>>>HA IMPORTADO",archivo," EXITOSAMENTE A",database,"!!!<<<")		
 			else:
 				print("\n\t>>El archivo no existe")
 				inicio=1
@@ -63,8 +98,9 @@ while inicio==0:
 		#ejecutar la query 
 		cursor.execute("SELECT * FROM registros") #(execute: prepara la sentencia)
 		rows=cursor.fetchall()#(presenta el resultado | FETCH ALL)
+		
+		print("\n\t>>REGISTROS DATABASE:")
 		for i in rows:
-			print("\n\t>>REGISTROS DATABASE:")
 			print("\t",i)
 
 		#los datos (ingresados) se perpetrar(commit) a la base de datos
@@ -99,8 +135,9 @@ while inicio==0:
 	  			print("\n>>Cerrando el cursor...")
 	  			cursor.close()
 	  			#cerrando conexión
-	  			print(">>Desconectando de la DATABASE",database)
+	  			print(">>Desconectando de la DATABASE",database,"...")
 	  			conexion_db.close()
+	  			print(">>Desconectado de MySQL.")
 	  			break
 	  		else:
 	  			print("\n\terror: opción incorrecta")
