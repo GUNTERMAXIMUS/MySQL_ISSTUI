@@ -7,7 +7,13 @@ USER="user"
 PASSWD="password"
 DB="database"
 PORT="port"
+#variables
 inicio=0
+host=""
+user=""
+password=""
+database=""
+port=""
 
 #dictionary vacío
 configuracion={}
@@ -40,12 +46,10 @@ while inicio==0:
 			port="3306"
 		else:
 			print("\n\tdebe ingresar una opción correcta")
-			inicio=0 #LUEGO ARREGLAR
-			break
+			inicio=0
 	else:
 		print("\n\tdebe ingresar un número")
-		inicio=0 #LUEGO ARREGLAR
-		break
+		inicio=0
 	
 	#los argumentos de conexión definidos en un diccionario [con keys:values] para su mejor manipulación
 	#otra opción --> configuracion=mysql.connector.connect(option_files='/etc/mysql/connectors.cnf')
