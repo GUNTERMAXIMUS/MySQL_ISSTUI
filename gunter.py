@@ -72,12 +72,13 @@ while inicio==0:
 
 				with open(archivo,"r") as csv_file:
 					csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
-					print("\n\t>>LEYENDO",archivo) 
+					print("\n\t>>Leyendo",archivo,"...") 
 
 					#separar el statement sql entre query y values 
 					#e implementarlo en un loop (for) a cada índice de cada fila (row) del archivo csv que ha sido abierto y leído.
 					query=("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)")
 					values=("id","clave_profesor","nombre","apellido","fecha","hora_de_ingreso","hora_de_salida","sala")
+					print("\n\t>>IMPORTANDO",archivo) 
 					for row in csv_data:
 						str(row[0])
 						str(row[1])
@@ -90,7 +91,7 @@ while inicio==0:
 						print("\t",row) #imprime una lista de todos los valores por cada linea 
 	
 						cursor.execute(query, row)
-						print("\n\t>>>HA IMPORTADO",archivo," EXITOSAMENTE A",database,"!!!<<<")		
+						print("\n\t>>>Ha importado",archivo," EXITOSAMENTE a",database,"!!!<<<")		
 			else:
 				print("\n\t>>El archivo no existe")
 				inicio=1
