@@ -89,7 +89,8 @@ while inicio==0:
 						str(row[7])
 						print("\timportando:",row) #imprime una lista de todos los valores por cada linea 
 						cursor.execute(query, row)
-						cursor.execute("DELETE FROM registros where sala=0;")
+						cursor.execute("DELETE FROM registros where sala=0 OR clave_profesor=0;")
+					print("\t>>Datos innecesarios eliminados correctamente.")
 					print("\n\t>>>Ha importado",archivo," EXITOSAMENTE a",database,"!!!<<<")		
 			else:
 				print("\n\t>>El archivo no existe")
