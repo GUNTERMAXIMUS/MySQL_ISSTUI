@@ -72,8 +72,7 @@ while inicio==0:
 		while inicio==1:
 			inicio+=1
 			archivo=input("\n\tIngrese nombre del archivo.csv o path (ej. C:/users/user/desktop/carpeta/archivo.csv): ")
-			if os.path.exists(archivo):
-
+			if os.path.exists(archivo):	
 				with open(archivo,"r") as csv_file:
 					csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
 					print("\n\t>>Leyendo",archivo,"...") 
@@ -102,8 +101,7 @@ while inicio==0:
 
 		#ejecutar la query 
 		cursor.execute("SELECT * FROM registros") #(execute: prepara la sentencia)
-		rows=cursor.fetchall()#(presenta el resultado | FETCH ALL)
-		
+		rows=cursor.fetchall()#(presenta el resultado | FETCH ALL)	
 		print("\n\t>>REGISTROS DATABASE:")
 		for i in rows:
 			print("\t",i)
