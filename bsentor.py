@@ -16,9 +16,22 @@ password=""
 database=""
 port=""
 charset=""
-
 #dictionary vacío
 configuracion={}
+
+#funciones
+def recorrid_rows():
+	"""Usa fetch-all en una variable para recorrer todas las rows y luego imprimirlas"""
+	rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+	print("\n\t>>REGISTROS DATABASE:")
+	for i in rows:
+		print("\t",i)
+def recorrido_rows_indice():
+	"""Usa fetch-all en una variable para recorrer todas las rows y luego imprimirlas por índice"""
+	rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
+	print("\n\t>>REGISTROS DATABASE:")
+	for i in rows:
+		print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])
 
 while inicio==0:
 	inicio+=1
@@ -99,44 +112,29 @@ while inicio==0:
 							if op_sql=="1":								
 								#ejecutar la query
 								cursor.execute("SELECT * FROM registros")
-								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
-								print("\n\t>>REGISTROS DATABASE:")
-								for i in rows:
-									print("\t",i)
+								recorrido_rows()
 							elif op_sql=="2":
 								print("\n\tIngrese ID's BETWEEN (puede seleccionar el mismo número para una ID)")
 								id1=input("\t> ID 1: ")
 								id2=input("\t> ID 2: ")
 								cursor.execute("SELECT * FROM registros WHERE id BETWEEN %s AND %s",(id1,id2,))
-								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
-								print("\n\t>>REGISTROS DATABASE:")
-								for i in rows:
-									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])
+								recorrido_rows_indice()
 							elif op_sql=="3":
 								clave=input("\n\t> clave: ")
 								cursor.execute("SELECT * FROM registros WHERE clave_profesor=%s",(clave,))
-								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
-								print("\n\t>>REGISTROS DATABASE:")
-								for i in rows:
-									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])											
+								recorrido_rows_indice()		
 							elif op_sql=="4":
 								print("\n\tPara ingresar acentos o caracteres en español, es necesario que su database esté con UTF-8")
 								print("\tDe lo contrario no se imprimirán los resultados buscados")
 								nombre=input("\t\n> nombre: ")
 								apellido=input("\t> apellido: ")
 								cursor.execute("SELECT * FROM registros WHERE nombre=%s AND apellido=%s",(nombre,apellido,))
-								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
-								print("\n\t>>REGISTROS DATABASE:")
-								for i in rows:
-									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])								
+								recorrido_rows_indice()							
 							elif op_sql=="5":
 								print("Ingrese en el siguiente formato: AAAA/MM/DD")
 								fecha=input("\t>Fecha: ")
 								cursor.execute("SELECT * FROM registros WHERE fecha=%s",(fecha,))
-								rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
-								print("\n\t>>REGISTROS DATABASE:")
-								for i in rows:
-									print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])			
+								recorrido_rows_indice()		
 							elif op_sql=="6":
 								inicio=1
 							else:
@@ -152,7 +150,6 @@ while inicio==0:
 						with open(archivo,"r") as csv_file:
 							csv_data=csv.reader(csv_file, delimiter=",", lineterminator='\n')
 							print("\n\t>>Leyendo",archivo,"...") 
-
 							#separar el statement sql entre query y values 
 							#e implementarlo en un loop (for) a cada índice de cada fila (row) del archivo csv que ha sido abierto y leído.
 							query=("INSERT INTO registros (id,clave_profesor, nombre, apellido, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)")
