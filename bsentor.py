@@ -20,7 +20,7 @@ charset=""
 configuracion={}
 
 #funciones
-def recorrid_rows():
+def recorrido_rows():
 	"""Usa fetch-all en una variable para recorrer todas las rows y luego imprimirlas"""
 	rows=cursor.fetchall()#(presenta todo el resultado | FETCH ALL /fetchone presentar la primera row)	
 	print("\n\t>>REGISTROS DATABASE:")
@@ -32,10 +32,10 @@ def recorrido_rows_indice():
 	print("\n\t>>REGISTROS DATABASE:")
 	for i in rows:
 		print("\t",i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7])
-
+"""------------------------------------------------------------------------------------------------------"""
 while inicio==0:
 	inicio+=1
-	#MENU INICIO: argumentos de conexión definidos por el usuario
+	#MENU INICIO: argumentos de conexión
 	print("\n/////////////////////////////////////////////////////////")
 	print("\t>>>BIENVENIDO A MYSQL-CONNECTOR-PYTHON<<<")
 	print("////////////////////////////////////////////////////////")
