@@ -1,4 +1,4 @@
-Clave_profesor,Nombre,Apellido,Fecha,Hora_de_Ingreso,Hora_de_salida,Sala
+clave_profesor,nombre,apellido,fecha,hora_de_ingreso,hora_de_salida,sala
 2233,Pelayo,Aravena,2019-05-03,16:00,17:30,205
 2245,Gonzalo,Mateluna,2019-05-04,17:30,19:00,204
 1354,Santiago,Urbina,2019-05-05,8:00,9:30,206
