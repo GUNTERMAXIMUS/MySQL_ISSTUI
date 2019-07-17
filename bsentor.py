@@ -46,13 +46,13 @@ def recorrido_rows_indices(y=False):
 		else:
 			error_op(2)
 			y=True
-def crear(datos):
+def crear(datos, path=None):
 	"""crea un archivo de salida según el directorio actual"""
-	os.chdir(os.getcwd())
-	#os.chdir()
-	data_filename="iss_tui_registros.js"
-	with open(data_filename, "w", encoding="utf-8") as file_handle:
-		json.dump(datos, file_handle)
+	#os.chdir(os.getcwd())
+	os.chdir(path) #ingresar path
+	with open("registros_iss_tui.json", 'w') as f:
+		json.dump(data, f,sort_keys=True, indent=4, default=str)
+	print("\t>Exportado",e)
 def error_op(x=None):
 	if x==1:
 		print("\n\t>error: opción incorrecta")
@@ -239,15 +239,12 @@ while inicio==0:
 				
 				elif main_menu=="3":
 					#Importar datos Json
-					print("\n\tExportando datos a json...")
-					#row_headers=[x[0] for x in cursor.description] #this will extract row headers
+					print("\n\t>Exportando datos a json...")
 					cursor.execute("SELECT * FROM registros")
 					data=cursor.fetchall()						
 					for e in data:
-						datos_json=(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '), default=str))
-						print("exportando",datos_json)
-						crear(datos_json)
-					print("\tExportado con éxito")
+						crear(data, input("Ingrese directorio 1:"))
+					print("\t>Exportado finalizada correctamente")
 
 				elif main_menu=="4": #exit
 					continue
