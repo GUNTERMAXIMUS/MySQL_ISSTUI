@@ -48,9 +48,10 @@ def recorrido_rows_indices(y=False):
 			y=True
 def crear(datos):
 	"""crea un archivo de salida según el directorio actual"""
-	os.chdir(os.getcwd())
-	print(os.getcwd())
-	data_filename = pathlib.Path(__file__).with_name("iss_tui_registros.json")
+	#os.chdir(os.getcwd())
+	#print(os.getcwd())
+	#data_filename = pathlib.Path(__file__).with_name("iss_tui_registros.json")
+	data_filename="iss_tui_registros.json"
 	with open(data_filename, "w", encoding="utf-8") as file_handle:
 		json.dump(datos, file_handle)
 def error_op(x=None):
@@ -153,15 +154,16 @@ while inicio==0:
 				if main_menu=="0":
 					if para_crear_db==False:
 						print("\n\t>>>creando database...")
-						cursor.execute("CREATE DATABASE iss_tuii")
-						database="iss_tuii"
+						cursor.execute("CREATE DATABASE iss_tui")
+						database="iss_tui"
 						configuracion[DB]=database
 						print("\t>>>reconectando a...", database)
 						para_crear_db=True
 						inicio=1
 					elif para_crear_tabla==True:
 						print("\n\t>>>creando tablas con sus columnas...")
-						cursor.execute("CREATE TABLE registros (`id` int(11) NOT NULL AUTO_INCREMENT, `clave_profesor` int(4) DEFAULT NULL,  `nombre` varchar(15) DEFAULT 'NULL',  `hora_de_ingreso` time DEFAULT NULL,  `hora_de_salida` time DEFAULT NULL,  `sala` int(3) DEFAULT NULL, PRIMARY KEY (`id`))")
+						cursor.execute("CREATE TABLE registros (`id` int(11) NOT NULL AUTO_INCREMENT, `clave_profesor` int(4) DEFAULT NULL,  `fecha` date DEFAULT NULL,  `hora_de_ingreso` time DEFAULT NULL,  `hora_de_salida` time DEFAULT NULL,  `sala` int(3) DEFAULT NULL, PRIMARY KEY (`id`))")
+						print("\t>>tablas y columnas creadas en registros")
 						para_crear_db=False
 						main_menu=""
 						inicio=1
@@ -296,6 +298,7 @@ while inicio==0:
 	  			print(">>Desconectando de la DATABASE",database,"...")
 	  			conexion_db.close()
 	  			print(">>Desconectado de MySQL.")
+				enter=input("\t>>ENTER PARA TERMINAR")
 	  			os.system("cls" if os.name == "nt" else "clear")
 	  			break
 	  		else:
