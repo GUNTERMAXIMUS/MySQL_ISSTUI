@@ -51,7 +51,7 @@ def crear(datos):
 	#os.chdir(os.getcwd())
 	#print(os.getcwd())
 	#data_filename = pathlib.Path(__file__).with_name("iss_tui_registros.json")
-	data_filename="iss_tui_registros.json"
+	data_filename="iss_tui_registros.js"
 	with open(data_filename, "w", encoding="utf-8") as file_handle:
 		json.dump(datos, file_handle)
 def error_op(x=None):
@@ -298,7 +298,7 @@ while inicio==0:
 	  			print(">>Desconectando de la DATABASE",database,"...")
 	  			conexion_db.close()
 	  			print(">>Desconectado de MySQL.")
-				enter=input("\t>>ENTER PARA TERMINAR")
+	  			enter=input("\t>>ENTER PARA TERMINAR")
 	  			os.system("cls" if os.name == "nt" else "clear")
 	  			break
 	  		else:
