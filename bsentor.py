@@ -48,9 +48,8 @@ def recorrido_rows_indices(y=False):
 			y=True
 def crear(datos):
 	"""crea un archivo de salida según el directorio actual"""
-	#os.chdir(os.getcwd())
-	#print(os.getcwd())
-	#data_filename = pathlib.Path(__file__).with_name("iss_tui_registros.json")
+	os.chdir(os.getcwd())
+	#os.chdir()
 	data_filename="iss_tui_registros.js"
 	with open(data_filename, "w", encoding="utf-8") as file_handle:
 		json.dump(datos, file_handle)
@@ -163,6 +162,7 @@ while inicio==0:
 					elif para_crear_tabla==True:
 						print("\n\t>>>creando tablas con sus columnas...")
 						cursor.execute("CREATE TABLE registros (`id` int(11) NOT NULL AUTO_INCREMENT, `clave_profesor` int(4) DEFAULT NULL,  `fecha` date DEFAULT NULL,  `hora_de_ingreso` time DEFAULT NULL,  `hora_de_salida` time DEFAULT NULL,  `sala` int(3) DEFAULT NULL, PRIMARY KEY (`id`))")
+						cursor.execute("INSERT INTO registros (id, clave_profesor, fecha, hora_de_ingreso, hora_de_salida, sala) VALUES ('1','1111','2019/07/17','12:12:12','13:13:13','505')")
 						print("\t>>tablas y columnas creadas en registros")
 						para_crear_db=False
 						main_menu=""
@@ -242,13 +242,15 @@ while inicio==0:
 					print("\n\tExportando datos a json...")
 					#row_headers=[x[0] for x in cursor.description] #this will extract row headers
 					cursor.execute("SELECT * FROM registros")
-					data=cursor.fetchall()
+					data=cursor.fetchall()						
 					for e in data:
 						datos_json=(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '), default=str))
-						print(datos_json)
+						print("exportando",datos_json)
 						crear(datos_json)
-					print("\tExportado con éxito")	
-#				elif main_menu=="4":
+					print("\tExportado con éxito")
+
+				elif main_menu=="4": #exit
+					continue
 
 	#para error de conexión
 	except mysql.connector.Error as err:
@@ -292,13 +294,13 @@ while inicio==0:
 	  					inicio=3
 	  		elif operacion=="2":
 	  			#cerrando cursor
-	  			print("\n>>Cerrando el cursor...")
+	  			print("\n\t>>Cerrando el cursor...")
 	  			cursor.close()
 	  			#cerrando conexión
-	  			print(">>Desconectando de la DATABASE",database,"...")
+	  			print("\t>>Desconectando de la DATABASE",database,"...")
 	  			conexion_db.close()
-	  			print(">>Desconectado de MySQL.")
-	  			enter=input("\t>>ENTER PARA TERMINAR")
+	  			print("\t>>Desconectado de MySQL.")
+	  			enter=input("\n\t>>ENTER PARA TERMINAR")
 	  			os.system("cls" if os.name == "nt" else "clear")
 	  			break
 	  		else:
